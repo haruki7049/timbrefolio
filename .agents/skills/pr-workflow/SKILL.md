@@ -41,17 +41,7 @@ Ensure the PR description includes:
 - **Verification**: Explicitly list executed verification commands (`treefmt --fail-on-change`, `zig build test`) and their success status.
 - **Breaking Changes**: Highlight any breaking changes to modules or dependencies.
 
-## 4. GitHub Projects Integration
-
-When creating PRs and issues or updating project attributes in GitHub Projects (Projects v2):
-
-- **Assign Project Attributes**: When creating a PR or issue, always assign the `Estimate`, `Priority`, and `Size` fields in GitHub Projects.
-- Follow the [`github-projects`](../github-projects/SKILL.md) skill.
-- Inspect the project schema (`gh project field-list`) before attempting to set field values.
-- Never pass multiple `--field` and `--value` pairs in a single `gh project item-edit` command; invoke the command once per field.
-- **Explicit Milestone Assignment Only**: AI agents **MUST NEVER** automatically attach or set GitHub Milestones on Pull Requests or Issues unless explicitly requested or instructed by the user.
-
-## 5. Strict Safety & Approval Rules
+## 4. Strict Safety & Approval Rules
 
 - **Committing on `main` locally is normal**: Once instructed, agents may execute `git commit` on `main` directly without seeking confirmation.
 - **`main` is protected on GitHub (ruleset active)**: A GitHub ruleset enforces PR-only merges into `main` and also blocks deletion, non-fast-forward pushes, and unsigned commits, and requires linear history. `git push origin main` will therefore be rejected — publishing anything means pushing a topic branch and opening a PR instead, and that push still requires the user's explicit instruction each time; a commit instruction alone does not imply push. AI agents **MUST NEVER** merge PRs or execute `git merge` autonomously.
