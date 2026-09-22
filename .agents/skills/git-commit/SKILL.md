@@ -8,10 +8,10 @@ Read this to understand the commit policy and message conventions for `timbrefol
 
 ## Prohibition on Unprompted Commit/Push Proposals
 
-- **Execution is allowed**: When instructed by the user, or when creating and updating pull requests on topic branches, AI agents may execute `git commit` and `git push` directly.
+- **Committing on `main` locally is normal**: Once the user instructs a commit, execute `git commit` immediately; do not ask for confirmation.
+- **`main` is protected on GitHub (ruleset active)**: A GitHub ruleset enforces PR-only merges into `main` and also blocks deletion, non-fast-forward pushes, and unsigned commits, and requires linear history. `git push origin main` will therefore be rejected — publishing anything means pushing a topic branch and opening a PR instead, and that push still requires the user's explicit instruction each time; a commit instruction alone does not imply push.
 - **Do NOT propose or prompt for commits or pushes**: AI agents must never prompt the user to commit or push unprompted, nor ask for confirmation (e.g., do NOT ask "Would you like me to commit and push?").
 - **Do NOT include unprompted commit message proposals**: Do NOT append "Proposed commit message" or commit/push suggestion sections at the end of a response unless explicitly asked by the user.
-- **NEVER push directly to `main`**: All commits and pushes must strictly target topic branches. Merging into `main` rests exclusively with the human maintainer.
 
 ## Commit Message Conventions
 
