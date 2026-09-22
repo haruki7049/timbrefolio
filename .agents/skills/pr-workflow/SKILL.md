@@ -12,17 +12,10 @@ Before committing or opening a PR, execute the following commands and ensure all
 
 | Task | Command | Description |
 | :--- | :--- | :--- |
-| **Check All Formatting (treefmt)** | `treefmt --fail-on-change` | Verifies formatting across Nix, Markdown, and any Zig/Shell files present |
+| **Check All Formatting (treefmt)** | `treefmt --fail-on-change` | Verifies formatting across Nix, Markdown, Zig, and Shell files |
 | **Format All Files (treefmt)** | `treefmt` | Auto-formats all files in the repository using treefmt |
-
-Once a Zig project (`build.zig`) exists in this repository, also run:
-
-| Task | Command | Description |
-| :--- | :--- | :--- |
 | **Run All Tests** | `zig build test` | Executes unit tests for instrument set modules |
 | **Build** | `zig build` | Compiles the project |
-
-Do not claim a `zig build`/`zig build test` step was run before `build.zig` exists — state that it is not applicable yet instead.
 
 ## 2. Commit & PR Title Conventions
 
@@ -45,7 +38,7 @@ Ensure the PR description includes:
 
 - **Summary**: Concise overview of changes.
 - **Linked Issue / Closes Statement**: Always include an explicit issue-closing keyword (e.g. `Closes #16`, `Fixes #12`, or `Resolves #5`) when resolving an open issue.
-- **Verification**: Explicitly list executed verification commands (`treefmt --fail-on-change`, and `zig build test` once applicable) and their success status.
+- **Verification**: Explicitly list executed verification commands (`treefmt --fail-on-change`, `zig build test`) and their success status.
 - **Breaking Changes**: Highlight any breaking changes to modules or dependencies.
 
 ## 4. GitHub Projects Integration

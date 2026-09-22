@@ -51,6 +51,22 @@
             # zon2nix
             pkgs.zon2nix
           ];
+
+          timbrefolio = pkgs.stdenv.mkDerivation {
+            name = "timbrefolio";
+            src = lib.cleanSource ./.;
+            doCheck = true;
+
+            nativeBuildInputs = nativeBuildInputs ++ [ ZIG.hook ];
+            inherit buildInputs;
+
+            postPatch = ''
+              ln -s ${pkgs.callPackage ./.deps.nix { }} zig-pkg
+
+              # Remove NIX_CFLAGS_COMPILE because zig cannot understand it
+              unset NIX_CFLAGS_COMPILE
+            '';
+          };
         in
         {
           treefmt = {
@@ -72,6 +88,15 @@
             # Shell Scripts
             programs.shellcheck.enable = true;
             programs.shfmt.enable = true;
+          };
+
+          packages = {
+            inherit timbrefolio;
+            default = timbrefolio;
+          };
+
+          checks = {
+            inherit timbrefolio;
           };
 
           devShells.default = pkgs.mkShell {

@@ -10,8 +10,9 @@ ______________________________________________________________________
 
 - **Development Environment**: Managed with Nix, `direnv`, and `nix-direnv` for automated environment isolation. Formatting across all languages is handled via `treefmt`.
 - **Target Language Version**: Zig `0.16.0`, matching the toolchain pinned in `flake.nix`. Avoid unnecessary external dependencies to maintain seamless cross-compilation.
-- **Current State**: The repository is in an early stage; only the Nix development environment exists so far (`flake.nix`, `flake.lock`, `.envrc`). The Zig project structure (`build.zig`, `build.zig.zon`, `src/`, instrument set modules) will be introduced as implementation work begins. Do not assume paths that are not yet present — verify with `list`/`glob` before referencing them.
-- **Dependency Convention**: Once a `build.zig.zon` exists, external Zig dependencies (such as `lightmix`) are expected to be mirrored into a Nix-fetchable lockfile via `zon2nix`, following the same convention as [`coffee-chan`](https://github.com/haruki7049/coffee-chan). See [`update-dependencies`](.agents/skills/update-dependencies/SKILL.md).
+- **Current State**: `timbrefolio` is a Zig library package (`build.zig`, `build.zig.zon`, `src/root.zig`) that depends on `lightmix` and exposes one instrument set per genre under `modules/<genre>/`. The public module is registered as `timbrefolio` via `b.addModule` (matching lightmix's own library-package convention, not a final "song" app like `coffee-chan`), so downstream projects consume it with `b.dependency("timbrefolio", .{})`.
+- **Genres**: `modules/analog-synth/` (subtractive), `modules/drums/` (percussion, unpitched instruments), `modules/fm-synth/` (FM/phase modulation), `modules/ambient/` (sustained pads, attack/release envelopes instead of decay-only). Each genre directory has its own `root.zig` aggregator; each instrument directory has a `root.zig` (PascalCase File Struct) plus a leaf `.zig` implementing `Options(T)`/`gen`/`array`, following the shape documented in each genre's `root.zig` doc comment. `sandbox/<instrument>/` holds one-off preview modules rendered via `zig build sandbox`.
+- **Dependency Convention**: External Zig dependencies (such as `lightmix`) are mirrored into a Nix-fetchable lockfile via `zon2nix`, following the same convention as [`coffee-chan`](https://github.com/haruki7049/coffee-chan). See [`update-dependencies`](.agents/skills/update-dependencies/SKILL.md).
 
 ______________________________________________________________________
 
@@ -20,7 +21,7 @@ ______________________________________________________________________
 - **NEVER AUTO-MERGE TO MAIN**: AI agents **MUST NEVER** merge PRs, execute `git merge`, or directly push commits to the `main` branch autonomously.
 - **NEVER PROPOSE COMMITS OR PUSHES UNPROMPTED**: AI agents **MUST NEVER** prompt the user to commit or push, nor propose commit messages unprompted. When instructed by the user or when creating/updating pull requests on topic branches, agents may execute `git commit` and `git push` directly without seeking confirmation.
 - **Mandatory Human Approval**: AI agents may create branches, create commits, push topic branches, propose PRs, format code, and run test suites, but the final action of merging changes into `main` rests strictly with the human maintainer.
-- **Verification Before Submitting**: All changes must pass `treefmt --fail-on-change`, and once the Zig project exists, `zig build` and `zig build test`.
+- **Verification Before Submitting**: All changes must pass `treefmt --fail-on-change`, `zig build`, and `zig build test`.
 - **Conventional Commits**: Use conventional commit prefixes (`feat:`, `fix:`, `refactor:`, `docs:`, `build:`, `test:`).
 - **Evidence First**: Base all answers and actions on actual file contents and command output. Never speculate or assume.
 - **Non-Destructive**: Never perform irreversible actions (file deletions, hard resets, remote push) without explicit user approval.
@@ -38,7 +39,7 @@ When asked to check status, assess the situation, or understand workspace contex
 1. **Local Git State**: Inspect working tree (`git status -s -b`) and recent commits (`git log -n 5 --oneline`).
 1. **GitHub PRs**: Check PR status (`gh pr status`) and current PR details (`gh pr view`).
 1. **GitHub Issues**: Check relevant open issues (`gh issue list --limit 5`).
-1. **Environment Health**: Verify formatting (`treefmt --fail-on-change`), and once the Zig project exists, build/test status (`zig build`, `zig build test`).
+1. **Environment Health**: Verify formatting (`treefmt --fail-on-change`) and build/test status (`zig build`, `zig build test`).
 1. **Synthesis**: Report a concise, structured status covering local state, remote GitHub state, and environment health.
 
 ______________________________________________________________________
