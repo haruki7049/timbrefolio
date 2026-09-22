@@ -18,9 +18,11 @@ ______________________________________________________________________
 
 ## 2. Strict Safety & Operational Rules (Always Enforced)
 
-- **NEVER AUTO-MERGE TO MAIN**: AI agents **MUST NEVER** merge PRs, execute `git merge`, or directly push commits to the `main` branch autonomously.
-- **NEVER PROPOSE COMMITS OR PUSHES UNPROMPTED**: AI agents **MUST NEVER** prompt the user to commit or push, nor propose commit messages unprompted. When instructed by the user or when creating/updating pull requests on topic branches, agents may execute `git commit` and `git push` directly without seeking confirmation.
-- **Mandatory Human Approval**: AI agents may create branches, create commits, push topic branches, propose PRs, format code, and run test suites, but the final action of merging changes into `main` rests strictly with the human maintainer.
+- **Committing on `main` locally is normal**: Once the user instructs a commit, execute `git commit` immediately; do not ask for confirmation.
+- **`main` is protected on GitHub (ruleset active)**: A GitHub ruleset enforces PR-only merges into `main` (0 required approvals, but the PR mechanism itself is mandatory) and also blocks deletion, non-fast-forward pushes, and unsigned commits, and requires linear history. `git push origin main` will therefore be rejected — publishing anything means pushing a topic branch and opening a PR instead. AI agents **MUST NEVER** merge PRs or execute `git merge` autonomously.
+- **Pushing always needs its own explicit instruction**: A commit instruction does NOT imply push. AI agents **MUST NEVER** push a branch to the remote unless the user explicitly instructs a push in that turn.
+- **NEVER PROPOSE COMMITS OR PUSHES UNPROMPTED**: AI agents **MUST NEVER** prompt the user to commit or push, nor propose commit messages unprompted (e.g. do NOT ask "Would you like me to commit and push?").
+- **Mandatory Human Approval**: The final action of pushing to the remote or merging changes into `main` rests strictly with the human maintainer's explicit instruction.
 - **Verification Before Submitting**: All changes must pass `treefmt --fail-on-change`, `zig build`, and `zig build test`.
 - **Conventional Commits**: Use conventional commit prefixes (`feat:`, `fix:`, `refactor:`, `docs:`, `build:`, `test:`).
 - **Evidence First**: Base all answers and actions on actual file contents and command output. Never speculate or assume.
