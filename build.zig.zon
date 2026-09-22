@@ -1,0 +1,23 @@
+.{
+    .name = .timbrefolio,
+    .version = "0.1.0",
+    .fingerprint = 0x496ada22ba6a1aed,
+    .minimum_zig_version = "0.16.0",
+
+    .dependencies = .{
+        .lightmix = .{
+            .url = "https://github.com/haruki7049/lightmix/archive/refs/tags/0.25.5.tar.gz",
+            .hash = "lightmix-0.25.5-SpCovD7pAwC5nRHWo3NHU4GT2SeV1vME5db3lnkV1RJR",
+        },
+    },
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "modules",
+        "LICENSE-APACHE",
+        "LICENSE-MIT",
+        "README.md",
+    },
+}
