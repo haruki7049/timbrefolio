@@ -29,8 +29,6 @@ ______________________________________________________________________
 - **Non-Destructive**: Never perform irreversible actions (file deletions, hard resets, remote push) without explicit user approval.
 - **Targeted Edits**: Make minimal, logical changes strictly necessary for the request. Do not modify unrelated files.
 - **English-Only Documentation**: All repository documentation, agent skills, code comments, commit messages, and PR descriptions must be written strictly in English. Never include Japanese or any non-English language in repository documentation or skill files.
-- **GitHub Projects Operations**: When updating GitHub Projects via `gh project item-edit`, always inspect schemas (`gh project field-list`) first rather than assuming field names or values. Update only one field per invocation, as passing multiple `--field` flags silently overwrites previous flags. See [`github-projects`](.agents/skills/github-projects/SKILL.md).
-- **Explicit Milestone Assignment Only**: AI agents **MUST NEVER** automatically attach or set GitHub Milestones on Pull Requests or Issues unless explicitly requested or instructed by the user.
 
 ______________________________________________________________________
 
@@ -57,5 +55,4 @@ Detailed runbooks and procedural workflows are maintained as workspace skills un
 | Deleting files, overwriting, git push/reset | [`irreversible`](.agents/skills/irreversible/SKILL.md) | Pre-checks and confirmation prompts |
 | Testing, verifying builds or behavior | [`verify`](.agents/skills/verify/SKILL.md) | Minimal, high-signal verification steps |
 | Adding or bumping `lightmix` or other Zig dependencies | [`update-dependencies`](.agents/skills/update-dependencies/SKILL.md) | Procedures for dependency updates and `.deps.nix` (once `build.zig.zon` exists) |
-| Updating GitHub Projects fields, issues/PRs | [`github-projects`](.agents/skills/github-projects/SKILL.md) | Procedures, caveats (single-field updates), and schema validation for Projects v2 |
 | Preparing PRs, formatting, pre-submission checks | [`pr-workflow`](.agents/skills/pr-workflow/SKILL.md) | Verification command table, commit rules, and PR requirements |
