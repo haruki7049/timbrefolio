@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Opens one pull request per outdated flake.lock input.
+  - package-ecosystem: "nix"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "build"
+      include: "scope"
