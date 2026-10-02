@@ -10,7 +10,6 @@
 const std = @import("std");
 
 pub const closed_hihat = @import("./closed-hihat/root.zig");
-pub const hihat = @import("./hihat/root.zig");
 pub const kick = @import("./kick/root.zig");
 pub const open_hihat = @import("./open-hihat/root.zig");
 pub const snare = @import("./snare/root.zig");
