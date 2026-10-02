@@ -95,6 +95,11 @@ fn build_sandbox(
     const paths_names: []const struct { []const u8, []const u8 } = &.{
         .{ "sandbox/pluck/mono-220.0.zig", "pluck-mono-220.0.wav" },
         .{ "sandbox/hihat/mono.zig", "hihat-mono.wav" },
+        .{ "sandbox/kick/mono.zig", "kick-mono.wav" },
+        .{ "sandbox/snare/mono.zig", "snare-mono.wav" },
+        .{ "sandbox/closed-hihat/mono.zig", "closed-hihat-mono.wav" },
+        .{ "sandbox/open-hihat/mono.zig", "open-hihat-mono.wav" },
+        .{ "sandbox/tom/mono.zig", "tom-mono.wav" },
         .{ "sandbox/bell/mono-440.0.zig", "bell-mono-440.0.wav" },
         .{ "sandbox/drone/mono-110.0.zig", "drone-mono-110.0.wav" },
     };
