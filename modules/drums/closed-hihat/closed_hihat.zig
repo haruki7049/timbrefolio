@@ -11,8 +11,8 @@ const metal_frequencies = [_]comptime_float{ 205.3, 304.4, 369.6, 522.7, 540.0, 
 /// Synthesis configuration options for the closed hi-hat generator.
 pub fn Options(comptime T: type) type {
     return struct {
-        /// Exponential amplitude decay factor (default: 60.0).
-        decay_rate: T = 60.0,
+        /// Exponential amplitude decay factor; the tail reaches -60 dB after about `6.9 / decay_rate` seconds, so render at least that long (default: 45.0).
+        decay_rate: T = 45.0,
         /// One-pole high-pass cutoff in Hz applied to the metallic bank; must be > 0 (default: 5000.0).
         cutoff_hz: T = 5000.0,
         /// Multiplier applied to every oscillator frequency in the metallic bank (default: 1.0).

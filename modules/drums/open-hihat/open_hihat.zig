@@ -12,8 +12,8 @@ const metal_frequencies = [_]comptime_float{ 205.3, 304.4, 369.6, 522.7, 540.0, 
 /// Synthesis configuration options for the open hi-hat generator.
 pub fn Options(comptime T: type) type {
     return struct {
-        /// Exponential amplitude decay factor (default: 8.0).
-        decay_rate: T = 8.0,
+        /// Exponential amplitude decay factor; the tail reaches -60 dB after about `6.9 / decay_rate` seconds, so render at least that long (default: 4.5).
+        decay_rate: T = 4.5,
         /// One-pole high-pass cutoff in Hz applied to the metallic bank; must be > 0 (default: 5000.0).
         cutoff_hz: T = 5000.0,
         /// Multiplier applied to every oscillator frequency in the metallic bank (default: 1.0).
@@ -113,7 +113,7 @@ test "gen function supports multi-channel stereo" {
 
 test "output stays within volume and decays toward zero" {
     const allocator = std.testing.allocator;
-    const length: usize = 44100;
+    const length: usize = 44100 * 2;
     const volume: f64 = 0.9;
     const actual = try array(f64, allocator, 44100, 1, length, volume, .{});
     defer allocator.free(actual);
