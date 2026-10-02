@@ -9,7 +9,7 @@ Reusable instrument sets for the [`lightmix`](https://github.com/haruki7049/ligh
 ## Genres
 
 - `analog_synth` — subtractive synthesis (`pluck`)
-- `drums` — percussion (`hihat`)
+- `drums` — percussion (`kick`, `snare`, `closed_hihat`, `open_hihat`, `tom`, `hihat`)
 - `fm_synth` — FM/phase modulation (`bell`)
 - `ambient` — sustained pads (`drone`)
 
