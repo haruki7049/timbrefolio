@@ -1,6 +1,6 @@
 //! Closed hi-hat generator: six detuned square waves at inharmonic ratios
-//! (the classic analog drum machine cymbal bank) through two cascaded
-//! one-pole high-pass filters, shaped by a very fast exponential decay.
+//! (the classic analog drum machine cymbal bank) through a one-pole
+//! high-pass filter that keeps the metallic core band, shaped by a very fast exponential decay.
 
 const std = @import("std");
 const lightmix = @import("lightmix");
@@ -13,10 +13,12 @@ pub fn Options(comptime T: type) type {
     return struct {
         /// Exponential amplitude decay factor (default: 60.0).
         decay_rate: T = 60.0,
-        /// Cutoff in Hz of the two cascaded one-pole high-pass filters; must be > 0 (default: 7000.0).
-        cutoff_hz: T = 7000.0,
+        /// One-pole high-pass cutoff in Hz applied to the metallic bank; must be > 0 (default: 5000.0).
+        cutoff_hz: T = 5000.0,
         /// Multiplier applied to every oscillator frequency in the metallic bank (default: 1.0).
         tuning: T = 1.0,
+        /// Output gain applied after filtering; the default keeps the attack peak within `volume` (default: 1.5).
+        level: T = 1.5,
     };
 }
 
@@ -56,9 +58,7 @@ pub fn array(
     const rc: T = 1.0 / (2.0 * std.math.pi * options.cutoff_hz);
     const alpha: T = rc / (rc + dt);
     var prev_metal: T = 0.0;
-    var stage1: T = 0.0;
-    var prev_stage1: T = 0.0;
-    var stage2: T = 0.0;
+    var filtered: T = 0.0;
 
     for (0..samples.len / channels) |i| {
         const t: T = @as(T, @floatFromInt(i)) * dt;
@@ -70,13 +70,11 @@ pub fn array(
         }
         metal /= @as(T, @floatFromInt(metal_frequencies.len));
 
-        stage1 = alpha * (stage1 + metal - prev_metal);
+        filtered = alpha * (filtered + metal - prev_metal);
         prev_metal = metal;
-        stage2 = alpha * (stage2 + stage1 - prev_stage1);
-        prev_stage1 = stage1;
 
         const env: T = std.math.exp(-options.decay_rate * t);
-        const value: T = stage2 * env * volume;
+        const value: T = filtered * env * options.level * volume;
 
         for (0..channels) |j| {
             samples[i * channels + j] = value;
@@ -123,6 +121,21 @@ test "output stays within volume and decays toward zero" {
         try std.testing.expect(@abs(sample) <= volume);
     }
     try std.testing.expect(@abs(actual[length - 1]) < 0.01);
+}
+
+test "attack keeps enough energy in the first 20 ms" {
+    const allocator = std.testing.allocator;
+    const length: usize = 44100 / 50;
+    const volume: f64 = 1.0;
+    const actual = try array(f64, allocator, 44100, 1, length, volume, .{});
+    defer allocator.free(actual);
+
+    var energy: f64 = 0.0;
+    for (actual) |sample| {
+        energy += sample * sample;
+    }
+    const rms: f64 = @sqrt(energy / @as(f64, @floatFromInt(length)));
+    try std.testing.expect(rms > 0.05 * volume);
 }
 
 test "output is deterministic across calls" {
